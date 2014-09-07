@@ -50,7 +50,6 @@ public class MyActivity extends Activity {
 
         if (savedInstanceState != null) {
             menuRotated = savedInstanceState.getBoolean(IS_MENU_OPENED);
-            // TODO: set image upside-down --- Animation is correct!
 
             menu.startAnimation(openRotateAnimation);
 

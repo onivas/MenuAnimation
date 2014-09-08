@@ -51,10 +51,11 @@ public class MyActivity extends Activity {
         if (savedInstanceState != null) {
             menuRotated = savedInstanceState.getBoolean(IS_MENU_OPENED);
 
-            menu.startAnimation(openRotateAnimation);
+            if (menuRotated) {
+                menu.startAnimation(openRotateAnimation);
 
-            menuItemsLayout.setVisibility(View.VISIBLE);
-
+                menuItemsLayout.setVisibility(View.VISIBLE);
+            }
         }
 
         menuItemsShowAnimation.addListener(new Animator.AnimatorListener() {

@@ -2,7 +2,9 @@ package com.savinoordine.menuanimation;
 
 import android.animation.Animator;
 import android.animation.AnimatorSet;
+import android.animation.Keyframe;
 import android.animation.ObjectAnimator;
+import android.animation.PropertyValuesHolder;
 import android.app.Activity;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -11,6 +13,8 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 
@@ -21,6 +25,7 @@ public class MyActivity extends Activity {
     private static final String  ANIMATION1 = "ANIMATION1";
     private static final String  ANIMATION2 = "ANIMATION2";
     private static final String  ANIMATION3 = "ANIMATION3";
+    private static final String  CHECKBOX_ROTATION = "CHECKBOX_ROTATION";
 
     private boolean menuRotated;
 
@@ -46,6 +51,8 @@ public class MyActivity extends Activity {
 
     AnimatorSet animatorSetClose;
     AnimatorSet animatorSetOpen;
+    private CheckBox rotationAnimationCheckbox;
+    private boolean rotationButtonEnabled;
 
     public MyActivity() {
         this.animation_button1 = LONG_ANIMATION_TIME;
@@ -72,21 +79,23 @@ public class MyActivity extends Activity {
         final RotateAnimation openRotateAnimation = setOpenMenuAnimation();
         final RotateAnimation closeRotateAnimation = setCloseMenuAnimation();
 
+        rotationAnimationCheckbox = (CheckBox) findViewById(R.id.rotation_checkbox);
+        rotationAnimationCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                rotationButtonEnabled = b;
+                animatorSetOpen = setAnimatorOpen();
+            }
+        });
 
         if (savedInstanceState != null) {
             menuRotated = savedInstanceState.getBoolean(IS_MENU_OPENED);
             animation_button1 = savedInstanceState.getInt(ANIMATION1);
             animation_button2 = savedInstanceState.getInt(ANIMATION2);
             animation_button3 = savedInstanceState.getInt(ANIMATION3);
+            rotationAnimationCheckbox.setChecked(savedInstanceState.getBoolean(CHECKBOX_ROTATION));
 
             menuRotated = false;
-            /*
-            if (menuRotated) {
-                menu.startAnimation(openRotateAnimation);
-                animatorSetOpen = setAnimatorOpen();
-                animatorSetOpen.start();
-            }
-            */
         }
 
 
@@ -160,6 +169,7 @@ public class MyActivity extends Activity {
         outState.putInt(ANIMATION1, animation_button1);
         outState.putInt(ANIMATION2, animation_button2);
         outState.putInt(ANIMATION3, animation_button3);
+        outState.putBoolean(CHECKBOX_ROTATION, rotationButtonEnabled);
     }
 
 
@@ -197,10 +207,55 @@ public class MyActivity extends Activity {
 
         AnimatorSet animation = new AnimatorSet();
 
-        animation.playTogether(
-                getMenuButtonAnimation(menuButton1, 0f, -px * 3, animation_button1),
-                getMenuButtonAnimation(menuButton2, 0f, -px * 2, animation_button2),
-                getMenuButtonAnimation(menuButton3, 0f, -px, animation_button3));
+        if (rotationButtonEnabled) {
+
+            Keyframe kf0 = Keyframe.ofFloat(0f, 1f);
+            Keyframe kf1 = Keyframe.ofFloat(0f, 360f);
+            Keyframe kf2 = Keyframe.ofFloat(1f, 0f);
+            PropertyValuesHolder pvhRotation = PropertyValuesHolder.ofKeyframe("rotation", kf0, kf1, kf2);
+
+            ObjectAnimator rotationAnimButton1 = ObjectAnimator.ofPropertyValuesHolder(menuButton1, pvhRotation);
+            ObjectAnimator.ofPropertyValuesHolder(menuButton1, pvhRotation);
+            rotationAnimButton1.setDuration(animation_button1);
+
+            AnimatorSet setButton1 = new AnimatorSet();
+            setButton1.playTogether(
+                    getMenuButtonAnimation(menuButton1, 0f, -px * 3, animation_button1),
+                    rotationAnimButton1
+            );
+
+            ObjectAnimator rotationAnimButton2 = ObjectAnimator.ofPropertyValuesHolder(menuButton2, pvhRotation);
+            ObjectAnimator.ofPropertyValuesHolder(menuButton2, pvhRotation);
+            rotationAnimButton2.setDuration(animation_button2);
+
+            AnimatorSet setButton2 = new AnimatorSet();
+            setButton1.playTogether(
+                    getMenuButtonAnimation(menuButton2, 0f, -px * 2, animation_button2),
+                    rotationAnimButton2
+            );
+
+            ObjectAnimator rotationAnimButton3 = ObjectAnimator.ofPropertyValuesHolder(menuButton3, pvhRotation);
+            ObjectAnimator.ofPropertyValuesHolder(menuButton3, pvhRotation);
+            rotationAnimButton3.setDuration(animation_button3);
+
+            AnimatorSet setButton3 = new AnimatorSet();
+            setButton1.playTogether(
+                    getMenuButtonAnimation(menuButton3, 0f, -px, animation_button3),
+                    rotationAnimButton3
+            );
+
+            animation.playTogether(
+                    setButton1,
+                    setButton2,
+                    setButton3);
+
+        } else {
+
+            animation.playTogether(
+                    getMenuButtonAnimation(menuButton1, 0f, -px * 3, animation_button1),
+                    getMenuButtonAnimation(menuButton2, 0f, -px * 2, animation_button2),
+                    getMenuButtonAnimation(menuButton3, 0f, -px, animation_button3));
+        }
 
         animation.addListener(new Animator.AnimatorListener() {
             @Override

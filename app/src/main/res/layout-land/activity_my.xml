@@ -103,6 +103,13 @@
                 android:layout_height="wrap_content"
                 android:text="Set value" />
 
+            <CheckBox
+                android:id="@+id/rotation_checkbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Open buttons with rotation"
+                android:checked="false" />
+
         </LinearLayout>
 
     </LinearLayout>

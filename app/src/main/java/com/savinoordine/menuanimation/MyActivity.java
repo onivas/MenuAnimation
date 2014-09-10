@@ -5,91 +5,129 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.res.Configuration;
-import android.graphics.Point;
 import android.os.Bundle;
-import android.view.Display;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 
 
 public class MyActivity extends Activity {
 
     private static final String IS_MENU_OPENED = "IS_MENU_OPENED";
+    private static final String  ANIMATION1 = "ANIMATION1";
+    private static final String  ANIMATION2 = "ANIMATION2";
+    private static final String  ANIMATION3 = "ANIMATION3";
 
     private boolean menuRotated;
 
     Button menu;
 
-    FrameLayout container;
+    Button menuButton1;
+    Button menuButton2;
+    Button menuButton3;
 
-    private static final int SHORT_ANIMATION_TIME = 500;
+    private static final int SHORT_ANIMATION_TIME = 200;
+    private static final int MEDIUM_ANIMATION_TIME = 300;
+    private static final int LONG_ANIMATION_TIME = 400;
+
+    int animation_button1;
+    int animation_button2;
+    int animation_button3;
+
+    private EditText animation_button1_button;
+    private EditText animation_button2_button;
+    private EditText animation_button3_button;
+
+    int px;
+
+    AnimatorSet animatorSetClose;
+    AnimatorSet animatorSetOpen;
+
+    public MyActivity() {
+        this.animation_button1 = LONG_ANIMATION_TIME;
+        this.animation_button2 = MEDIUM_ANIMATION_TIME;
+        this.animation_button3 = SHORT_ANIMATION_TIME;
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my);
 
-        final LinearLayout menuItemsLayout = (LinearLayout) findViewById(R.id.menu_items);
-
-        container = (FrameLayout) findViewById(R.id.container);
-
         menu = (Button) findViewById(R.id.ic_main_menu);
+
+        menuButton1 = (Button) findViewById(R.id.layout_button_1);
+        menuButton2 = (Button) findViewById(R.id.menu_button_2);
+        menuButton3 = (Button) findViewById(R.id.menu_button_3);
+
+        animation_button1_button = (EditText) findViewById(R.id.animation_button_1);
+        animation_button2_button = (EditText) findViewById(R.id.animation_button_2);
+        animation_button3_button = (EditText) findViewById(R.id.animation_button_3);
 
         final RotateAnimation openRotateAnimation = setOpenMenuAnimation();
         final RotateAnimation closeRotateAnimation = setCloseMenuAnimation();
 
-        final ObjectAnimator menuItemsShowAnimation = getMenuItemsShowAnimation(menuItemsLayout);
-        final ObjectAnimator menuItemsHideAnimation = getMenuItemsHideAnimation(menuItemsLayout);
 
         if (savedInstanceState != null) {
             menuRotated = savedInstanceState.getBoolean(IS_MENU_OPENED);
+            animation_button1 = savedInstanceState.getInt(ANIMATION1);
+            animation_button2 = savedInstanceState.getInt(ANIMATION2);
+            animation_button3 = savedInstanceState.getInt(ANIMATION3);
 
+            menuRotated = false;
+            /*
             if (menuRotated) {
                 menu.startAnimation(openRotateAnimation);
-
-                menuItemsLayout.setVisibility(View.VISIBLE);
+                animatorSetOpen = setAnimatorOpen();
+                animatorSetOpen.start();
             }
+            */
         }
 
-        menuItemsShowAnimation.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animator) {}
 
+        DisplayMetrics metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        float logicalDensity = metrics.density;
+        px = (int) Math.ceil(getResources().getDimension(R.dimen.dim78px) * logicalDensity);
+
+        animatorSetOpen = setAnimatorOpen();
+        animatorSetClose = setAnimatorClose();
+
+        // Change button animation values
+        Button set_value_button = (Button) findViewById(R.id.set_value_button);
+        set_value_button.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onAnimationEnd(Animator animator) {
-                menu.setClickable(true);
+            public void onClick(View view) {
+                animation_button1 = (animation_button1_button.getText().length() > 0) ? Integer.parseInt(animation_button1_button.getText().toString()) : LONG_ANIMATION_TIME;
+                animation_button2 = (animation_button2_button.getText().length() > 0) ? Integer.parseInt(animation_button2_button.getText().toString()) : MEDIUM_ANIMATION_TIME;
+                animation_button3 = (animation_button3_button.getText().length() > 0) ? Integer.parseInt(animation_button3_button.getText().toString()) : SHORT_ANIMATION_TIME;
+
+                animatorSetOpen = setAnimatorOpen();
+                animatorSetClose = setAnimatorClose();
             }
-
-            @Override
-            public void onAnimationCancel(Animator animator) {}
-
-            @Override
-            public void onAnimationRepeat(Animator animator) {}
         });
 
-        menuItemsHideAnimation.addListener(new Animator.AnimatorListener() {
-
+        // Default animation values
+        Button default_value_button = (Button) findViewById(R.id.reset_default_value_button);
+        default_value_button.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onAnimationStart(Animator animator) {}
+            public void onClick(View view) {
+                animation_button1 = LONG_ANIMATION_TIME;
+                animation_button2 = MEDIUM_ANIMATION_TIME;
+                animation_button3 = SHORT_ANIMATION_TIME;
 
-            @Override
-            public void onAnimationEnd(Animator animator) {
-                menuItemsLayout.setVisibility(View.GONE);
-                menu.setClickable(true);
+                animation_button1_button.setText("");
+                animation_button2_button.setText("");
+                animation_button3_button.setText("");
+
+                animatorSetOpen = setAnimatorOpen();
+                animatorSetClose = setAnimatorClose();
             }
-
-            @Override
-            public void onAnimationCancel(Animator animator) {}
-
-            @Override
-            public void onAnimationRepeat(Animator animator) {}
         });
 
         menu.setOnClickListener(new View.OnClickListener() {
@@ -99,13 +137,14 @@ public class MyActivity extends Activity {
                 view.setClickable(false);
 
                 if (!menuRotated) {
-                    menuItemsLayout.setVisibility(View.VISIBLE);
-                    menuItemsShowAnimation.start();
+                    showMenuButtons();
+                    animatorSetOpen.start();
                     view.startAnimation(openRotateAnimation);
                     menuRotated = true;
 
                 } else {
-                    menuItemsHideAnimation.start();
+                    setNoShadowToButtons();
+                    animatorSetClose.start();
                     view.startAnimation(closeRotateAnimation);
                     menuRotated = false;
                 }
@@ -118,44 +157,125 @@ public class MyActivity extends Activity {
         super.onSaveInstanceState(outState);
 
         outState.putBoolean(IS_MENU_OPENED, menuRotated);
+        outState.putInt(ANIMATION1, animation_button1);
+        outState.putInt(ANIMATION2, animation_button2);
+        outState.putInt(ANIMATION3, animation_button3);
     }
 
-    private ObjectAnimator getMenuItemsHideAnimation(LinearLayout menuItems) {
 
-        ObjectAnimator menuItemsHideAnimation;
+    private AnimatorSet setAnimatorClose() {
 
-        if(this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-            menuItemsHideAnimation = ObjectAnimator.ofFloat(menuItems, View.TRANSLATION_Y, 0f, 500f);
-            menuItemsHideAnimation.setDuration(SHORT_ANIMATION_TIME);
+        AnimatorSet animation = new AnimatorSet();
 
-        } else {
-            menuItemsHideAnimation = ObjectAnimator.ofFloat(menuItems, View.TRANSLATION_X, 0f, 500f);
-            menuItemsHideAnimation.setDuration(SHORT_ANIMATION_TIME);
-        }
+        animation.playTogether(
+                getMenuButtonAnimation(menuButton1, -px * 3, 0f, animation_button1),
+                getMenuButtonAnimation(menuButton2, -px * 2, 0f, animation_button2),
+                getMenuButtonAnimation(menuButton3, -px , 0f, animation_button3));
 
-        return menuItemsHideAnimation;
+        animation.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animator) {}
+
+            @Override
+            public void onAnimationEnd(Animator animator) {
+                menu.setClickable(true);
+                hideMenuButtons();
+
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animator) {}
+
+            @Override
+            public void onAnimationRepeat(Animator animator) {}
+        });
+
+        return animation;
     }
 
-    private ObjectAnimator getMenuItemsShowAnimation(LinearLayout menuItems) {
+    private AnimatorSet setAnimatorOpen() {
 
-        ObjectAnimator menuItemsShowAnimation;
+        AnimatorSet animation = new AnimatorSet();
+
+        animation.playTogether(
+                getMenuButtonAnimation(menuButton1, 0f, -px * 3, animation_button1),
+                getMenuButtonAnimation(menuButton2, 0f, -px * 2, animation_button2),
+                getMenuButtonAnimation(menuButton3, 0f, -px, animation_button3));
+
+        animation.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animator) {}
+
+            @Override
+            public void onAnimationEnd(Animator animator) {
+                setShadowToButtons();
+                menu.setClickable(true);
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animator) {}
+
+            @Override
+            public void onAnimationRepeat(Animator animator) {}
+        });
+
+        return animation;
+    }
+
+    private void setNoShadowToButtons() {
+
+        menuButton1.setBackground(getResources().getDrawable(R.drawable.ic_menu_no_shadow));
+        menuButton2.setBackground(getResources().getDrawable(R.drawable.ic_menu_no_shadow));
+        menuButton3.setBackground(getResources().getDrawable(R.drawable.ic_menu_no_shadow));
+    }
+
+    private void setShadowToButtons() {
+
+        menuButton1.setBackground(getResources().getDrawable(R.drawable.ic_menu));
+        menuButton2.setBackground(getResources().getDrawable(R.drawable.ic_menu));
+        menuButton3.setBackground(getResources().getDrawable(R.drawable.ic_menu));
+    }
+
+    private void showMenuButtons() {
+
+        menuButton1.setVisibility(View.VISIBLE);
+        menuButton2.setVisibility(View.VISIBLE);
+        menuButton3.setVisibility(View.VISIBLE);
+    }
+
+    private void hideMenuButtons() {
+
+        menuButton1.setVisibility(View.GONE);
+        menuButton2.setVisibility(View.GONE);
+        menuButton3.setVisibility(View.GONE);
+    }
+
+    //TODO:  gestire la rotazione
+
+    private ObjectAnimator getMenuButtonAnimation(Button button, float from, float to, int time) {
+
+        ObjectAnimator objectAnimator;
 
         if(this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-            menuItemsShowAnimation = ObjectAnimator.ofFloat(menuItems, View.TRANSLATION_Y, 500f, 0f, 20f, 0f);
-            menuItemsShowAnimation.setDuration(SHORT_ANIMATION_TIME);
+
+            objectAnimator = ObjectAnimator.ofFloat(button, View.TRANSLATION_Y, from, to);
+            objectAnimator.setRepeatCount(0);
+            objectAnimator.setDuration(time);
 
         } else {
-            menuItemsShowAnimation = ObjectAnimator.ofFloat(menuItems, View.TRANSLATION_X, 500f, 0f, 20f, 0f);
-            menuItemsShowAnimation.setDuration(SHORT_ANIMATION_TIME);
+            objectAnimator = ObjectAnimator.ofFloat(button, View.TRANSLATION_X, from, to);
+            objectAnimator.setRepeatCount(0);
+            objectAnimator.setDuration(time);
         }
-        return menuItemsShowAnimation;
+
+        return objectAnimator;
     }
 
     private RotateAnimation setOpenMenuAnimation() {
 
         RotateAnimation openRotateAnimation = new RotateAnimation(0, 135, Animation.RELATIVE_TO_SELF,
                 0.5f,  Animation.RELATIVE_TO_SELF, 0.5f);
-        openRotateAnimation.setDuration(SHORT_ANIMATION_TIME);
+        openRotateAnimation.setDuration(LONG_ANIMATION_TIME);
         openRotateAnimation.setFillAfter(true);
         openRotateAnimation.setFillEnabled(true);
 
@@ -166,7 +286,7 @@ public class MyActivity extends Activity {
 
         RotateAnimation closeRotateAnimation = new RotateAnimation(135, 0, Animation.RELATIVE_TO_SELF,
                 0.5f,  Animation.RELATIVE_TO_SELF, 0.5f);
-        closeRotateAnimation.setDuration(SHORT_ANIMATION_TIME);
+        closeRotateAnimation.setDuration(LONG_ANIMATION_TIME);
         closeRotateAnimation.setFillAfter(true);
         closeRotateAnimation.setFillEnabled(true);
 

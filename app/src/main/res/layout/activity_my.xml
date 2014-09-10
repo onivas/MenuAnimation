@@ -3,82 +3,123 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context=".MyActivity">
 
     <LinearLayout
-        android:id="@+id/menu_items"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_gravity="right|bottom"
-        android:layout_marginBottom="90dp"
-        android:visibility="gone">
+        android:layout_gravity="left|top"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Set speed animation buttons (default)" />
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/animation_button_1"
+                android:layout_width="@dimen/dim78dp"
+                android:layout_height="wrap_content"
+                android:inputType="number" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="test" />
-
-            <Button
-                android:layout_width="78dp"
-                android:layout_height="78dp"
-                android:background="@drawable/ic_menu" />
+                android:text="(400)" />
 
         </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="test" />
+            android:orientation="horizontal">
 
+            <EditText
+                android:id="@+id/animation_button_2"
+                android:layout_width="@dimen/dim78dp"
+                android:layout_height="wrap_content"
+                android:inputType="number" />
 
-        <Button
-            android:layout_width="78dp"
-            android:layout_height="78dp"
-            android:background="@drawable/ic_menu" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="(300)" />
 
-    </LinearLayout>
+        </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="test" />
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/animation_button_3"
+                android:layout_width="@dimen/dim78dp"
+                android:layout_height="wrap_content"
+                android:inputType="number" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="(200)" />
+
+        </LinearLayout>
 
 
-        <Button
-            android:layout_width="78dp"
-            android:layout_height="78dp"
-            android:background="@drawable/ic_menu" />
+            <Button
+                android:id="@+id/set_value_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Set value" />
+
+            <Button
+                android:id="@+id/reset_default_value_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="(Set default value)" />
 
     </LinearLayout>
 
-    </LinearLayout>
+
+    <Button
+        android:id="@+id/layout_button_1"
+        android:layout_width="@dimen/dim78dp"
+        android:layout_height="@dimen/dim78dp"
+        android:layout_gravity="bottom|right"
+        android:background="@drawable/ic_menu"
+        android:visibility="gone" />
+
+    <Button
+        android:id="@+id/menu_button_2"
+        android:layout_width="@dimen/dim78dp"
+        android:layout_height="@dimen/dim78dp"
+        android:layout_gravity="bottom|right"
+        android:background="@drawable/ic_menu_no_shadow"
+        android:visibility="gone" />
+
+    <Button
+        android:id="@+id/menu_button_3"
+        android:layout_width="@dimen/dim78dp"
+        android:layout_height="@dimen/dim78dp"
+        android:layout_gravity="bottom|right"
+        android:background="@drawable/ic_menu_no_shadow"
+        android:visibility="gone" />
+
 
     <Button
         android:id="@+id/ic_main_menu"
-        android:layout_width="78dp"
-        android:layout_height="78dp"
-        android:background="@drawable/ic_menu"
+        android:layout_width="@dimen/dim78dp"
+        android:layout_height="@dimen/dim78dp"
         android:layout_gravity="bottom|right"
-         />
+        android:background="@drawable/ic_menu" />
 
 </FrameLayout>

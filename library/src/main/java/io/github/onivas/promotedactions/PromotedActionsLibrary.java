@@ -42,7 +42,7 @@ public class PromotedActionsLibrary {
         context = activityContext;
         promotedActions = new ArrayList<ImageButton>();
         frameLayout = layout;
-        px = (int) context.getResources().getDimension(R.dimen.dim76dp) + 10;
+        px = (int) context.getResources().getDimension(R.dimen.dim56dp) + 10;
         openRotation();
         closeRotation();
     }

@@ -32,6 +32,6 @@ public class MyActivity extends Activity {
         promotedActionsLibrary.addItem(getResources().getDrawable(android.R.drawable.ic_menu_send), onClickListener);
         promotedActionsLibrary.addItem(getResources().getDrawable(android.R.drawable.ic_input_get), onClickListener);
 
-        promotedActionsLibrary.addMainItem(getResources().getDrawable(android.R.drawable.ic_input_add));
+        promotedActionsLibrary.addMainItem(getResources().getDrawable(R.drawable.ic_add));
     }
 }

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <ImageButton xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="76dp"
-    android:layout_height="76dp"
+    android:layout_width="@dimen/dim56dp"
+    android:layout_height="@dimen/dim56dp"
     android:layout_gravity="bottom|right"
     android:visibility="visible"
     android:background="@drawable/onivas_fab_circle"

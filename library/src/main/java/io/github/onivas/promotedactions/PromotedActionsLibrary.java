@@ -105,6 +105,10 @@ public class PromotedActionsLibrary {
             objectAnimator[i] = setCloseAnimation(promotedActions.get(i), i);
         }
 
+        if (objectAnimator.length == 0) {
+            objectAnimator = null;
+        }
+
         animation.playTogether(objectAnimator);
         animation.addListener(new Animator.AnimatorListener() {
             @Override
@@ -137,11 +141,17 @@ public class PromotedActionsLibrary {
             objectAnimatorSetup();
         }
 
+
+
         AnimatorSet animation = new AnimatorSet();
 
         for (int i = 0; i < promotedActions.size(); i++) {
 
             objectAnimator[i] = setOpenAnimation(promotedActions.get(i), i);
+        }
+
+        if (objectAnimator.length == 0) {
+            objectAnimator = null;
         }
 
         animation.playTogether(objectAnimator);
@@ -166,6 +176,7 @@ public class PromotedActionsLibrary {
             @Override
             public void onAnimationRepeat(Animator animator) {}
         });
+
 
         return animation;
     }

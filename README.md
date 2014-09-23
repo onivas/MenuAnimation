@@ -1,4 +1,6 @@
-# Menu Animation Project
+# Menu Animation 
+##Floating Action Button (FAB) based on Material Design
+
 By Savino Ordine - io.github.onivas.promotedactions.PromotedActionsLibrary;
 
 This is a Lib allow you to create a Promoted Action menu placed on right|bottom corner of the screen.

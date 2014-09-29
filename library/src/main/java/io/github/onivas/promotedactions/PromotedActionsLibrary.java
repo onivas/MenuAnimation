@@ -47,7 +47,7 @@ public class PromotedActionsLibrary {
         closeRotation();
     }
 
-    public void addMainItem(Drawable drawable) {
+    public ImageButton addMainItem(Drawable drawable) {
 
         ImageButton button = (ImageButton) LayoutInflater.from(context).inflate(R.layout.main_promoted_action_button, frameLayout, false);
 
@@ -71,7 +71,7 @@ public class PromotedActionsLibrary {
 
         mainImageButton = button;
 
-        return;
+        return button;
     }
 
     public void addItem(Drawable drawable, View.OnClickListener onClickListener) {

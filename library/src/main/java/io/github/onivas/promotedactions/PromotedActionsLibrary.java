@@ -47,6 +47,7 @@ public class PromotedActionsLibrary {
         closeRotation();
     }
 
+    
     public ImageButton addMainItem(Drawable drawable) {
 
         ImageButton button = (ImageButton) LayoutInflater.from(context).inflate(R.layout.main_promoted_action_button, frameLayout, false);

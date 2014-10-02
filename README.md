@@ -5,6 +5,7 @@ By Savino Ordine - io.github.onivas.promotedactions.PromotedActionsLibrary;
 
 This is a Lib allow you to create a Promoted Action menu placed on right|bottom corner of the screen.
 
+![Promoted Action zoom animation](https://github.com/onivas/MenuAnimation/blob/master/animationZoom.gif)
 ![Promoted Action animation](https://github.com/onivas/MenuAnimation/blob/master/app/promotedAction.gif)
 
 ##How it works
